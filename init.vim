@@ -7,15 +7,30 @@ call plug#begin()
 
 
 "Autocomplete / Syntax -----------------------------------------------------|
-Plug 'sheerun/vim-polyglot'
+
 Plug 'dense-analysis/ale'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'honza/vim-snippets' "snippets for coc plugin
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+
+" Git Support
+Plug 'tpope/vim-fugitive'
+
 
 " Interface ----------------------------------------------------------------|
+
+
+" Smooth Scrooling
+Plug 'yuttie/comfortable-motion.vim'
+
+" NERDTREE
+Plug 'preservim/nerdtree' " folders explorer
+Plug 'ryanoasis/vim-devicons' " show icon files on nerdtree
+Plug 'Xuyuanp/nerdtree-git-plugin' " show icons status git on nerdtree
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight' " show colors icon syntax on nerdtree
+
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'ryanoasis/vim-devicons'
 Plug 'jiangmiao/auto-pairs'
 if (has("nvim"))
     Plug 'nvim-lua/plenary.nvim'
@@ -43,7 +58,7 @@ set smartindent      " Automatically inserts one extra level of indentation in s
 set incsearch        " Incremental search
 set smartcase        " Consider case if there is a upper case character
 set ignorecase       " Ingore case in search
-set scrolloff=8      " Minimum number of lines to keep above and below the cursor
+" set scrolloff=8      " Minimum number of lines to keep above and below the cursor
 set signcolumn=yes   " Add a column on the left. Useful for linting
 set colorcolumn=100  " Draws a line at the given line to keep aware of the line size
 set cmdheight=2      " Give more space for displaying messages
@@ -59,9 +74,37 @@ filetype plugin on   " Load the plugin file for the file type, if any
 filetype indent on   " Load the indent file for the file type, if any
 
 
+
+" INTERFACE SETS ------
+
+" Smooth Scrooling config
+let g:comfortable_motion_scroll_down_key = "j"
+let g:comfortable_motion_scroll_up_key = "k"
+
+
+" THEMES SETS ============================================================================|
+
+
+" Color 24bit -----------
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+"if (empty($TMUX))
+"  if (has("nvim"))
+"    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+"    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+"  endif
+"  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+"  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+"  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+"  if (has("termguicolors"))
+"    set termguicolors
+"  endif
+"endif
+
+
 " REMAPS ===============================================================================|
 
-nnoremap <C-o> :CocCommand explorer <cr>   " Open and close NerdeTree
 nnoremap <C-s> :w! <cr>
 nnoremap <C-q> :q! <cr>
 
@@ -72,13 +115,40 @@ map <C-k> <C-w>k
 map <C-l> <C-w>l
 
 
+" AUTO CMDS =============================================================================|
+
+" highlight all the words under the cursor
+"function! HighlightWordUnderCursor()
+"    if getline(".")[col(".")-1] !~# '[[:punct:][:blank:]]'
+"        exec 'match' 'Search' '/\V\<'.expand('<cword>').'\>/'
+"    else
+"        match none
+"    endif
+" endfunction
+"
+"autocmd! CursorHold,CursorHoldI * call HighlightWordUnderCursor()
+
+
+
+
+
+" NERDTREE =============================================================================|
+
+nnoremap <leader>n :NERDTreeFocus<CR>
+nnoremap <C-n> :NERDTree<CR>
+nnoremap <C-o> :NERDTreeToggle<CR>
+nnoremap <C-f> :NERDTreeFind<CR>
+
+" If another buffer tries to replace NERDTree, put it in the other window, and bring back NERDTree.
+autocmd BufEnter * if bufname('#') =~ 'NERD_tree_\d\+' && bufname('%') !~ 'NERD_tree_\d\+' && winnr('$') > 1 |
+    \ let buf=bufnr() | buffer# | execute "normal! \<C-W>w" | execute 'buffer'.buf | endif
+
 
 " AIRLANE ==============================================================================|
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
-
-
+let g:airline_theme='<gruvbox>'
 
 " ALE ==================================================================================|
 
@@ -258,6 +328,7 @@ nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
 
 " COC Explorer -----------------------
 
+:nmap <space>e <Cmd>CocCommand explorer<CR>
 
 let g:coc_explorer_global_presets = {
 \   '.vim': {

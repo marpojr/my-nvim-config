@@ -21,3 +21,7 @@ ctrl+o= open explorer
 s = open an vertical split
 i = opan an horizontal split
 Crtl+WW = next split
+
+on nerdtree
+m: open file options
+m > a: create file on select directory

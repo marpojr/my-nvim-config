@@ -5,11 +5,9 @@
                                   "ref: github.com/junegunn/vim-plug
 call plug#begin()
 
-" Explorer -----------------------------------------------------------------|
-Plug 'scrooloose/nerdtree'        "file explorer on the left side
-"
+
 "Autocomplete / Syntax -----------------------------------------------------|
-"Plug 'sheerun/vim-polyglot'
+Plug 'sheerun/vim-polyglot'
 Plug 'dense-analysis/ale'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'honza/vim-snippets' "snippets for coc plugin
@@ -18,9 +16,11 @@ Plug 'honza/vim-snippets' "snippets for coc plugin
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
-Plug 'sheerun/vim-polyglot'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'jiangmiao/auto-pairs'
+if (has("nvim"))
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim'
+endif
 
 
 call plug#end()
@@ -61,7 +61,7 @@ filetype indent on   " Load the indent file for the file type, if any
 
 " REMAPS ===============================================================================|
 
-nnoremap <C-o> :NERDTreeToggle <cr>     " Open and close NerdeTree
+nnoremap <C-o> :CocCommand explorer <cr>   " Open and close NerdeTree
 nnoremap <C-s> :w! <cr>
 nnoremap <C-q> :q! <cr>
 
@@ -95,7 +95,7 @@ let g:ale_fix_on_save = 1
 
 " COC CONFIG ===========================================================================|
 
-let g:coc_global_extensions = ['coc-snippets',]
+let g:coc_global_extensions = ['coc-snippets','coc-explorer']
 " it's the same as :CocInstall
 
 
@@ -253,3 +253,61 @@ nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
 nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list.
 nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+
+
+
+" COC Explorer -----------------------
+
+
+let g:coc_explorer_global_presets = {
+\   '.vim': {
+\     'root-uri': '~/.vim',
+\   },
+\   'cocConfig': {
+\      'root-uri': '~/.config/coc',
+\   },
+\   'tab': {
+\     'position': 'tab',
+\     'quit-on-open': v:true,
+\   },
+\   'tab:$': {
+\     'position': 'tab:$',
+\     'quit-on-open': v:true,
+\   },
+\   'floating': {
+\     'position': 'floating',
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingTop': {
+\     'position': 'floating',
+\     'floating-position': 'center-top',
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingLeftside': {
+\     'position': 'floating',
+\     'floating-position': 'left-center',
+\     'floating-width': 50,
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'floatingRightside': {
+\     'position': 'floating',
+\     'floating-position': 'right-center',
+\     'floating-width': 50,
+\     'open-action-strategy': 'sourceWindow',
+\   },
+\   'simplify': {
+\     'file-child-template': '[selection | clip | 1] [indent][icon | 1] [filename omitCenter 1]'
+\   },
+\   'buffer': {
+\     'sources': [{'name': 'buffer', 'expand': v:true}]
+\   },
+\ }
+
+" Use preset argument to open it
+nnoremap <space>ed :CocCommand explorer --preset .vim<CR>
+nnoremap <space>ef :CocCommand explorer --preset floating<CR>
+nnoremap <space>ec :CocCommand explorer --preset cocConfig<CR>
+nnoremap <space>eb :CocCommand explorer --preset buffer<CR>
+
+" List all presets
+nnoremap <space>el :CocList explPresets

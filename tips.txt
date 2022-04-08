@@ -1,0 +1,23 @@
+Install Nvim AppImage:
+
+1. Download the last stable version
+https://github.com/neovim/neovim/releases
+
+2. Rename "appimage.nvim to "vim"
+
+3. Execute>
+chmod +x nvim
+sudo chown root:root nvim
+sudo mv nvim /usr/bin
+
+end!
+
+-------
+
+
+shortcut navegation no explorer
+
+ctrl+o= open explorer
+s = open an vertical split
+i = opan an horizontal split
+Crtl+WW = next split

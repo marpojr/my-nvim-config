@@ -14,6 +14,13 @@ end!
 
 -------
 
+shortcut "vim" as "nvim"
+
+echo 'alias vim="nvim"' > .bashrc
+source .bashrc
+
+
+-------
 
 shortcut navegation no explorer
 

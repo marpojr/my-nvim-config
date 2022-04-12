@@ -11,7 +11,7 @@ Plug 'yuttie/comfortable-motion.vim' " Smooth scrooling
 
 " Themes
 Plug 'savq/melange'
-" Plug 'ryanoasis/vim-devicons' " show icon files on nerdtree
+Plug 'ryanoasis/vim-devicons' " show icon files on nerdtree
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -40,6 +40,7 @@ call plug#end()
 syntax on            " Enable syntax highlight
 set number           " Enable number on the left
 set relativenumber   " Current line is 0
+set cursorline       " Show a line in cursor position
 set mouse=a          " Enable mouse support
 set hidden		     " Hides the current buffer when a new file is opnned
 set tabstop=4        " Show existing tab with 4 spaces width
@@ -103,6 +104,10 @@ nnoremap <C-f> :NERDTreeFind<CR>
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
 let g:airline_theme='base16_gruvbox_dark_soft'
+
+
+
+
 
 
 
